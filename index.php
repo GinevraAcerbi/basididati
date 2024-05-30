@@ -44,7 +44,7 @@
           if(!$img)
             $img[0]["percorso"]="";
           ?>
-          <img width="250px" height="250px" alt="foto mancante" style="background-color: black" src="<?php echo($img[0]["percorso"]) ?>"/>
+          <img width="200px" height="250px" style="background-color:pink" src="<?php echo($img[0]["percorso"]) ?>"/>
         </div>
       </div>
     </div>

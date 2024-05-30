@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background-color: white;
+    color: black;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    overflow-x: hidden;
+  }
+  
+  .tm-container {
+    background-color:lightblue;
+    max-width: 1400px;
+    background-repeat: no repeat;
+  }
+  
+  .tm-site-title {
+    color: darksalmon;
+    font-size: 3rem;
+  }
+  
+  .tm-site-subtitle {
+    color: black;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .tm-section-1 {
+    height: 750px;
+    background-image: url(https://img.freepik.com/free-vector/vibrant-pink-watercolor-painting-background_53876-58931.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1717027200&semt=ais_user);
+    background-size: cover;
+    -webkit-clip-path: polygon(0px 0px, 100% 0px, 100% 84%, 0px 100%);
+    clip-path: polygon(0px 0px, 100% 0px, 100% 84%, 0px 100%);
+    /* background-position: center -95px; */
+    background-repeat: no-repeat;
+    padding-top: 75px;
+  }
+  
+  .tm-section-3 {
+    height: 790px;
+    background-image: url(https://img.freepik.com/free-vector/vibrant-pink-watercolor-painting-background_53876-58931.jpg?size=626&ext=jpg&ga=GA1.1.2082370165.1717027200&semt=ais_user);
+    background-size: cover;
+    -webkit-clip-path: polygon(0px 0px, 100% 14%, 100% 86%, 0px 100%);
+    clip-path: polygon(0px 0px, 100% 14%, 100% 86%, 0px 100%);
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+  }
+
+  .tm-bg-circle-white {
+    background-color: white;
+    color: #6c6c6c;
+    padding: 75px 81px 75px 90px;
+    border-radius: 50%;
+    width: 550px;
+    height: 550px;
+  }
+  
+  .tm-bg-circle-pad-2 {
+    padding-left: 120px;
+  }
+  
+  p,
+  ul {
+    line-height: 2;
+    font-weight: 300;
+  }
+  
+  ul {
+    margin: 0;
+  }
+  ul.dashed {
+    list-style-type: none;
+  }
+  ul.dashed > li {
+    text-indent: -5px;
+  }
+  ul.dashed > li:before {
+    content: "-";
+    margin-right: 5px;
+    text-indent: -5px;
+  }
+  
+  .btn {
+    padding: 10px 30px;
+    font-size: 1.15rem;
+    font-weight: 300;
+    border-radius: 8px;
+  }
+  
+  a.btn:hover {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .tm-flex-center-v {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .tm-circle-img {
+    width: 550px;
+  }
+  
+  .tm-circle-img-container {
+    text-align: right;}
+  
+ 
+    .tm-section-left {
+      margin: 50px auto;
+    }
+  
+    .tm-circle-img-container {
+      text-align: center;
+    }
+  
+    .tm-footer-text {
+      margin-left: 30px;
+      margin-right: 30px;
+    }
+  
+  
+  @media (max-width: 576px) {
+    .tm-bg-circle-white {
+      border-radius: 100px;
+      width: 100%;
+      height: auto;
+      padding: 50px;
+    }
+  
+    img {
+      max-width: 100%;
+    }
+  
+    .tm-section-1,
+    .tm-section-3 {
+      height: auto;
+    }
+  
+    .tm-section-1 {
+      padding-bottom: 90px;
+      -webkit-clip-path: polygon(0px 0px, 100% 0px, 100% 92%, 0px 100%);
+      clip-path: polygon(0px 0px, 100% 0px, 100% 92%, 0px 100%);
+    }
+  
+    .tm-section-3 {
+      padding-top: 100px;
+      padding-bottom: 100px;
+      -webkit-clip-path: polygon(0px 0px, 100% 8%, 100% 92%, 0px 100%);
+      clip-path: polygon(0px 0px, 100% 8%, 100% 92%, 0px 100%);
+    }
+  
+    .tm-circle-img-container {
+      margin-bottom: 30px;
+    }
+  }
+  
