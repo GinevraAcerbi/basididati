@@ -26,7 +26,15 @@ include "utils/sql.php";
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn" type="submit"><i class="fa-solid fa-search"></i></button>
         &nbsp;&nbsp;&nbsp;
-        <a class="btn btn-sm btn-outline-secondary" href="#"><i class="fa-solid fa-user"></i></a>
+        <a class="btn btn-sm btn-outline-secondary" href="login.php"><i class="fa-solid fa-user"></i></a>
+        <?php
+        if(isset($_SESSION['sess_user'])) {
+          $userName= query_get_int("utente", ["nome"], ["id_utente" => intval($_SESSION["sess_user"])]);
+          echo '<span>benvenuto, ';
+          echo $userName[0]['nome'];
+          echo '</span>';
+        }
+        ?>
       </div>
     </div>
   </header>

@@ -28,6 +28,8 @@ $post=query_get("post", [], ["id_post" => $_GET["id_post"]]);
 ?>
 <img src="<?php echo($img[0]["percorso"]); ?>" alt="immagine" width="50%" height="50%">
 
+
+
 <?php
   include "./common/footer.php";
 ?>

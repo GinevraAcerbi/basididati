@@ -12,8 +12,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link px-2 text-body-secondary">
-                            about
+                        <a href="login.php" class="nav-link px-2 text-body-secondary">
+                            login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="profile.php" class="nav-link px-2 text-body-secondary">
+                            profile
                         </a>
                     </li>
                 </ul>

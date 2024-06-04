@@ -50,6 +50,49 @@ function query_get($table, $fields=[], $filters=[]){
 }
 
 /*
+questa funzione esegue query di selezione in accordo a la tabella desiderata ($table), i campi desiderati ($fields),
+e i campi di filtraggio sono solo interi($filters) come coppie chiave valore
+*/
+function query_get_int($table, $fields=[], $filters=[]){ 
+    global $connection;
+    $query="SELECT ";
+    if($fields){
+        $i=0;
+        foreach($fields as $field){
+            if($i==count($fields)-1)
+                $query.="$field ";
+            else
+                $query.="$field, ";
+            $i++;
+        }
+        $query.="FROM $table ";
+    }else
+        $query.="* FROM $table ";
+    
+    if($filters){
+        $query.="WHERE ";
+        $i=0;
+        foreach($filters as $key => $value){
+            $query.="$key = $value ";
+            if($i<count($filters)-1)
+                $query.="AND ";
+            $i++;
+        }
+    }
+    
+    $res= $connection->query($query);
+    $get_results=[];
+    if($res->num_rows>0){
+        foreach($res as $index=> $row) {
+            foreach($row as $key=> $value) {
+                $get_results[$index][$key]=$value;
+            }
+        }
+    }
+    return $get_results;
+}
+
+/*
 questa funzione esegue query di selezione in join tra le tabelle specificate in $tables, i campi desiderati ($fields),
 e i campi di filtraggio ($filters) come coppie chiave valore e i campi in join in $joinFields
 */

@@ -2,3 +2,9 @@
     background-color: pink !important;
 }
 
+#formLogin{
+    width: 50%;
+    left: 25%;
+    position: relative;
+    padding: 10%;
+}
