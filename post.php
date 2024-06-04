@@ -21,6 +21,7 @@ $post=query_get("post", [], ["id_post" => $_GET["id_post"]]);
     echo($username[0]["email"]); 
     ?>
 </p>
+
 <?php 
     $img = query_get("immagine", ["percorso"], ["id_post_imm" => $_GET["id_post"]]);
     if(!$img)
