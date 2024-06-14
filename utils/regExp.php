@@ -10,5 +10,5 @@ function emailIsValid($email)
 
 function numeroCartaIsValid($numeroCarta)
 {
-    return preg_match("/[0-9]{16}/", $numeroCarta);
+    return preg_match('/[0-9]{16}/', $numeroCarta);
 }

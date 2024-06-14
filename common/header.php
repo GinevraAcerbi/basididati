@@ -23,10 +23,17 @@ include "utils/sql.php";
         </a>
       </div>
       <div class="col-4 d-flex justify-content-end align-items-center">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <div class="autocomplete" style="width:300px;">
+          <input id="searchBar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </div>
         <button class="btn" type="submit"><i class="fa-solid fa-search"></i></button>
         &nbsp;&nbsp;&nbsp;
-        <a class="btn btn-sm btn-outline-secondary" href="login.php"><i class="fa-solid fa-user"></i></a>
+        <?php
+        if (isset($_SESSION['sess_user'])) 
+          echo '<a class="btn btn-sm btn-outline-secondary" href="profile.php"><i class="fa-solid fa-user"></i></a>';
+        else
+          echo '<a class="btn btn-sm btn-outline-secondary" href="login.php"><i class="fa-solid fa-user"></i></a>';
+        ?>
         <?php
         if(isset($_SESSION['sess_user'])) {
           $userName= query_get_int("utente", ["nome"], ["id_utente" => intval($_SESSION["sess_user"])]);
@@ -49,3 +56,77 @@ include "utils/sql.php";
       ?>
     </nav>
   </div>
+  <div id="test"></div>
+  <script>
+  $(document).ready(function() {
+    $("#searchBar").keyup(function() {
+      var search = $('#search').val();
+      if(search!="")
+        $.ajax({
+          type: "POST",
+          url: "search.php",
+          dataType: "json",
+          data: {search: search},
+          success: function(data) {
+            //$('#test').html(data);
+            console.log(data);
+             // set_results(data);
+          }
+        });
+    });
+
+    function set_results(data){
+      //$("#test").html(data);
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", "searchBar-autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      $("#searchBar").append(a);
+      /*for each item in the results got...*/
+      for (i = 0; i < data.length; i++) {
+        /*create a DIV element for each matching element:*/
+        b = document.createElement("DIV");
+        b.setAttribute("id", "item"+i);
+        /*insert a input field that will hold the current array item's value:*/
+        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+        /*execute a function when someone clicks on the item value (DIV element):*/
+        $( "#item"+i ).bind( "click", function() {
+          $("searchBar").val() = $("#item"+i).val();
+          closeAllLists();
+        });
+        $("searchBar-autocomplete-list").append(b);
+      }
+    }
+
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = $(".autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i])
+          $(".autocomplete-items ."+x[i]).remove();
+      }
+    }
+
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].addClass("autocomplete-active");
+    }
+
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].removeClass("autocomplete-active");
+      }
+    }
+  });
+</script>

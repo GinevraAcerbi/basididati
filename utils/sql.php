@@ -214,3 +214,31 @@ function query_update($table, $values, $filters){
     }
     return;
 }
+
+/*questa funzione fa l'update dei valori interi specificati */
+function query_update_int($table, $values, $filters){
+    global $connection;
+    $query ="UPDATE $table SET ";
+    $i=0;
+    foreach($values as $key => $value){
+        $query.= $key. "=".$value; 
+        if($i<count($values)-1)
+            $query.=",";
+        $i++;
+    }
+    $query .= " WHERE ";
+    $i=0;
+    foreach($filters as $key => $value){
+        $query.= $key. "=".$value; 
+        if($i<count($filters)-1)
+            $query.=" AND ";
+        $i++;
+    }
+
+    $res = $connection->query($query);
+    if(!$res){
+        echo "Error: " . $query . "<br>" . $connection->error;
+        exit;
+    }
+    return;
+}

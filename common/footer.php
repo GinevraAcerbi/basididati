@@ -11,16 +11,6 @@
                             regole
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="login.php" class="nav-link px-2 text-body-secondary">
-                            login
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="profile.php" class="nav-link px-2 text-body-secondary">
-                            profile
-                        </a>
-                    </li>
                 </ul>
                 <p class="text-center text-body-secondary">
                 © 2024 Ginevra Acerbi

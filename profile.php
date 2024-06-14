@@ -1,58 +1,40 @@
 <?php
 include "./common/header.php";
 ?>
-
-<link href="./style/profile.css" rel="stylesheet" id="profile">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<?php
+if (!isset($_SESSION['sess_user'])) 
+    header("location:index.php");
+$user=query_get_int("utente", [], ["id_utente" => intval($_SESSION["sess_user"])]);
+?>
+<link href="./style/profile.css" rel="stylesheet" type="text/css">
 
 <div class="container emp-profile">
     <form method="post">
         <div class="row">
-            <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="" alt="" />
-                    <div class="file btn btn-lg btn-primary">
-                        Change Photo
-                        <input type="file" name="file" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div class="profile-head">
-                    <h5>
-                        Mario Rossi
-                    </h5>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true">About</a>
                         </ul>
                     </ul>
                 </div>
             </div>
             <div class="col-md-2">
-                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" />
+                <button class="btn btn-outline-danger" id="btnLogOut">Log Out</button>  
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-8">
+            <div class="col-md-8" style="left:25%; position:relative;">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>User Id</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Kshiti123</p>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Name</label>
                             </div>
                             <div class="col-md-6">
-                                <p>Kshiti Ghelani</p>
+                                <p>
+                                    <?php echo($user[0]["nome"]) ?>
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -60,24 +42,49 @@ include "./common/header.php";
                                 <label>Email</label>
                             </div>
                             <div class="col-md-6">
-                                <p>kshitighelani@gmail.com</p>
+                                <p><?php echo($user[0]["email"])?></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label>numero post</label>
+                                <label>Numero post disponibili</label>
                             </div>
                             <div class="col-md-6">
-                                <p>1</p>
+                                <p><?php echo($user[0]["numpost"])?></p>
                             </div>
                         </div>
-                    </div>    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Numero commenti disponibili</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><?php echo($user[0]["numcomm"])?></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Numero like disponibili</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><?php echo($user[0]["numlike"])?></p>
+                            </div>
+                        </div>
+                    </div>   
                 </div>
             </div>
         </div>
     </form>
 </div>
-
+<script>
+    $(document).ready(function(){
+        $("#btnLogOut").click( function(){
+            $.ajax({
+                type: "POST",
+                url: "logout.php"
+            });
+        });
+    });
+</script>
 <?php
 include "./common/footer.php";
 ?>

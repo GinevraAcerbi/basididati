@@ -50,7 +50,6 @@
     </div>
     <?php } ?>
   </div>
-  <script src="js/index.js"></script>
 <?php
   include "./common/footer.php";
 ?>
