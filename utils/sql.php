@@ -39,7 +39,7 @@ function query_get($table, $fields=[], $filters=[]){
 
     $res= $connection->query($query);
     $get_results=[];
-    if($res->num_rows>0){
+    if($res && $res->num_rows>0){
         foreach($res as $index=> $row) {
             foreach($row as $key=> $value) {
                 $get_results[$index][$key]=$value;
@@ -168,6 +168,30 @@ function query_get_join($tables=[], $fields=[], $filters=[], $joinFields=[], $or
     return $get_results;
 }
 
+/*
+questa funzione esegue query di conteggio in accordo a la tabella desiderata ($table)
+e i campi di filtraggio ($filters) come coppie chiave valore
+*/
+function query_get_count($table, $filters=[]){ 
+    global $connection;
+    $query="SELECT COUNT(*) FROM $table ";
+    
+    if($filters){
+        $query.="WHERE ";
+        $i=0;
+        foreach($filters as $key => $value){
+            $query.="$key = '$value' ";
+            if($i<count($filters)-1)
+                $query.="AND ";
+            $i++;
+        }
+    }
+
+    $res= $connection->query($query);
+    $row=$res->fetch_row();
+    return $row[0];
+}
+
 /*questa funzione si occupa di inserire i valori che gli vengono dati e controlla che sia andato a buon fine*/
 function query_insert($table, $values){
     global $connection;
@@ -176,6 +200,49 @@ function query_insert($table, $values){
     foreach($values as $key => $value){
         $keys[] = $key;
         $values_[] = "'".$value."'"; 
+    }
+    $query = "INSERT INTO $table (".implode(", ", $keys).") VALUES (".implode(", ", $values_).")";
+
+    $res = $connection->query($query);
+    if(!$res){
+        echo "Error: " . $query . "<br>" . $connection->error;
+        exit;
+    }
+    return;
+}
+
+/*questa funzione si occupa di inserire i valori con i relativi tipi che gli vengono dati e controlla che sia andato a buon fine*/
+function query_insert_types($table, $values, $types){
+    global $connection;
+    $keys = [];
+    $values_ = [];
+    $i=0;
+    foreach($values as $key => $value){
+        $keys[] = $key;
+        if($types[$i]=="int")
+            $values_[] = $value;
+        else 
+            $values_[] = "'".$value."'";
+        $i++;
+    }
+    $query = "INSERT INTO $table (".implode(", ", $keys).") VALUES (".implode(", ", $values_).")";
+
+    $res = $connection->query($query);
+    if(!$res){
+        echo "Error: " . $query . "<br>" . $connection->error;
+        exit;
+    }
+    return;
+}
+
+/*questa funzione si occupa di inserire i valori interi che gli vengono dati e controlla che sia andato a buon fine*/
+function query_insert_int($table, $values){
+    global $connection;
+    $keys = [];
+    $values_ = [];
+    foreach($values as $key => $value){
+        $keys[] = $key;
+        $values_[] = $value; 
     }
     $query = "INSERT INTO $table (".implode(", ", $keys).") VALUES (".implode(", ", $values_).")";
 

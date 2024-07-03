@@ -1,9 +1,11 @@
 <?php
 include "./common/header.php";
+if(!isset($_SESSION["sess_user"])){
+    header("location: index.php");
+}
 ?>
 <?php
-if (!isset($_SESSION['sess_user'])) 
-    header("location:index.php");
+
 $user=query_get_int("utente", [], ["id_utente" => intval($_SESSION["sess_user"])]);
 ?>
 <link href="./style/profile.css" rel="stylesheet" type="text/css">
@@ -80,7 +82,10 @@ $user=query_get_int("utente", [], ["id_utente" => intval($_SESSION["sess_user"])
         $("#btnLogOut").click( function(){
             $.ajax({
                 type: "POST",
-                url: "logout.php"
+                url: "logout.php",
+                success: function(){
+                    window.location.href = "index.php";
+                }
             });
         });
     });

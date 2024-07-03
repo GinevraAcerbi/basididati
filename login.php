@@ -18,7 +18,7 @@ if (isset($_POST["submit"])) {
     if (!$user)
       $errorMessageLogin = "<div class='alert alert-danger' role='alert'> login non valido </div>";
     else {
-      $_SESSION['sess_user'] = $user;
+      $_SESSION['sess_user'] = $user[0]["id_utente"];
       header("refresh:1; url=index.php");
     }
   }

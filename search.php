@@ -1,4 +1,5 @@
 <?php
+if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
 include "utils/sql.php";
 if(isset($_POST["search"])){
     $result=array();
@@ -15,11 +16,12 @@ if(isset($_POST["search"])){
     $categoriaBlogResult=mysqli_query($connection, $categoriaBlogQuery);
     while($res3=mysqli_fetch_array($categoriaBlogResult))
         $result[] = array("name"=>"descrcat", "value"=>$res3["descrcat"]);
-    $utenteBlogQuery="SELECT nome FROM utente u, blog b WHERE u.nome LIKE '%$searchWord%' AND u.id_utente=b.id_utente_b LIMIT 2;";
+    $utenteBlogQuery="SELECT email FROM utente u, blog b WHERE u.email LIKE '%$searchWord%' AND u.id_utente=b.id_utente_b LIMIT 2;";
     $utenteBlogResult=mysqli_query($connection, $utenteBlogQuery);
     while($res4=mysqli_fetch_array($utenteBlogResult))
-        $result[] = array("name"=>"nome", "value"=>$res4["nome"]);
+        $result[] = array("name"=>"email", "value"=>$res4["email"]);
 
     print_r(json_encode($result));
+}
 }
 ?>

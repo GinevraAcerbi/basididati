@@ -22,17 +22,18 @@ include "utils/sql.php";
           <h1>TalkaboutAnything</h1>
         </a>
       </div>
-      <div class="col-4 d-flex justify-content-end align-items-center">
-        <div id="searchbarWrapper" class="autocomplete" style="width:300px;">
+      <div class="col-7 d-flex justify-content-end align-items-center">
+        <div id="searchbarWrapper" class="autocomplete" style="width:250px;">
           <input id="searchBar" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         </div>
         <button class="btn" type="submit"><i class="fa-solid fa-search"></i></button>
         &nbsp;&nbsp;&nbsp;
         <?php
-        if (isset($_SESSION['sess_user'])) 
-          echo '<a class="btn btn-sm btn-outline-secondary" href="profile.php"><i class="fa-solid fa-user"></i></a>';
-        else
-          echo '<a class="btn btn-sm btn-outline-secondary" href="login.php"><i class="fa-solid fa-user"></i></a>';
+        if (isset($_SESSION['sess_user'])){
+          echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;" href="profile.php"><i class="fa-solid fa-user"></i></a>';
+          echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;"  href="crea.php"><i class="fa-solid fa-circle-plus"></i></a>';
+        }else
+          echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;"  href="login.php"><i class="fa-solid fa-user"></i></a>';
         ?>
         <?php
         if(isset($_SESSION['sess_user'])) {
@@ -96,19 +97,51 @@ include "utils/sql.php";
       
         // Insert a input field that will hold the current array item's value
         if (data[i].name == "titolob") {
-          $item.html("Titolo Blog: " + data[i].value + "<input type='hidden' value='Titolo Blog: " + data[i].value + "'>");
+          $item.html("Titolo Blog: " + data[i].value + "<input type='hidden' value='titolo_"+ data[i].value +"'>");
         } else if (data[i].name == "descrizioneb") {
-          $item.html("Descrizione Blog: " + data[i].value + "<input type='hidden' value='Descrizione Blog: " + data[i].value + "'>");
+          $item.html("Descrizione Blog: " + data[i].value + "<input type='hidden' value='descrizione_"+ data[i].value +"'>");
         } else if (data[i].name == "descrcat") {
-          $item.html("Categoria: " + data[i].value + "<input type='hidden' value='Categoria: " + data[i].value + "'>");
-        } else if (data[i].name == "nome") {
-          $item.html("Utente: " + data[i].value + "<input type='hidden' value='Utente: " + data[i].value + "'>");
+          $item.html("Categoria: " + data[i].value + "<input type='hidden' value='categoria_" + data[i].value + "'>");
+        } else if (data[i].name == "email") {
+          $item.html("Utente: " + data[i].value + "<input type='hidden' value='utente_" + data[i].value + "'>");
         }
         
         // Execute a function when someone clicks on the item value (DIV element)
         $item.on("click", function() {
           $("#searchBar").val($(this).find("input").val());
           closeAllLists();
+          var key = $(this).find("input").val().split('_')[0];
+          var value = $(this).find("input").val().split('_')[1];
+          if(key == "titolo"){
+            $.ajax({
+              type: "POST",
+              url: "completeSearch.php",
+              data: {"titolob": value},
+              success: function(data) {
+                window.location.href = "blog.php?id_blog=" + data;
+              }
+            });
+          } else if(key=="descrizione"){
+            $.ajax({
+              type: "POST",
+              url: "completeSearch.php",
+              data: {"descrizioneb": value},
+              success: function(data) {
+                window.location.href = "blog.php?id_blog=" + data;
+              }
+            });
+          } else if(key=="categoria"){
+            $.ajax({
+              type: "POST",
+              url: "completeSearch.php",
+              data: {"descrcat": value},
+              success: function(data) {
+                window.location.href = "categorie.php?id_cat=" + data;
+              }
+            });
+          } else if(key=="utente"){
+            window.location.href = "blogsutente.php?user=" + value;
+          }
         });
         
         $autocompleteList.append($item);
