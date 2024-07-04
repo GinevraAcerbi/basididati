@@ -7,6 +7,7 @@ include "utils/regExp.php";
 
 <?php
 if (isset($_POST["submit"])) {
+  //validazione dei campi attraverso le funzioni di regExp.php
   if (!emailIsValid($_POST["email"])) {
     $errorMessageEmail = "<div class='alert alert-danger' role='alert'> inserire una email valida </div>";
   }
@@ -22,14 +23,18 @@ if (isset($_POST["submit"])) {
   if ($_POST["nome"] === "") {
     $errorMessageNome = "<div class='alert alert-danger' role='alert'> inserire un nome </div>";
   }
+  //verifica che le due password siano uguali
   if (!isset($errorMessageEmail) && !isset($errorMessagePassword) && !isset($errorMessagePasswordConfirm) && !isset($errorMessageCardNumber) && !isset($errorMessageNome)) {
     if ($_POST["password"] !== $_POST["password2"]) {
       $errorMessagePassword2 = "<div class='alert alert-danger' role='alert'> le password non sono uguali </div>";
     } else {
+      //verifica che l'utente non sia già iscritto al sito
       $user = query_get("utente", ["id_utente"], ["email" => $_POST["email"]]);
       if (!$user) {
+        //abbonamento premium
         if (isset($_POST["subscribe"])) {
           query_insert("utente", ["pwd" => md5($_POST["password"]), "email" => $_POST["email"], "numcarta" => $_POST["cardNumber"], "nome" => $_POST["nome"]]);
+          //eseguo una query per recuperare i dettagli dell'utente appena inserito utilizzando l'email
           $insertedUser = query_get("utente", ["id_utente"], ["email" => $_POST["email"]]);
           if (!$insertedUser)
             $errorMessageSignUp = "<div class='alert alert-danger' role='alert'> Errore durante la registrazione </div>";
@@ -38,11 +43,13 @@ if (isset($_POST["submit"])) {
             header("refresh:1; url=index.php");
           }
         } else {
+          //inserimento dell'utente non premium
           query_insert("utente", ["pwd" => md5($_POST["password"]), "email" => $_POST["email"], "nome" => $_POST["nome"]]);
           $insertedUser = query_get("utente", ["id_utente"], ["email" => $_POST["email"]]);
           if (!$insertedUser)
             $errorMessageSignUp = "<div class='alert alert-danger' role='alert'> Errore durante la registrazione </div>";
           else {
+            //set di dati iniziali per un nuovo utente
             query_update_int("utente", ["numcomm" => 2, "numlike" => 2, "numpost" => 2], ["id_utente" => intval($insertedUser[0]["id_utente"])]);
             $_SESSION['sess_user'] = $insertedUser;
             header("refresh:1; url=index.php");
@@ -67,15 +74,16 @@ if (isset($_POST["submit"])) {
 
 <body>
   <script>
+    //visualizzazione della carta 
     $(document).ready(function() {
       $("#exampleInputCardNumber1").hide();
       $("#numeroCarta").hide();
       $("#exampleInputSubscribe1").change(function() {
         if ($(this).prop("checked")) {
-          $("#exampleInputCardNumber1").show();
+          $("#exampleInputCardNumber1").show();//se vero mostra la carta
           $("#numeroCarta").show();
         } else {
-          $("#exampleInputCardNumber1").hide();
+          $("#exampleInputCardNumber1").hide();//se falso nasconde la carta 
           $("#numeroCarta").hide();
         }
       });
@@ -117,6 +125,7 @@ if (isset($_POST["submit"])) {
       </div>
       <input name="submit" type="submit" class="btn btn-primary" value="Registrati">
       <?php
+      //visualizzazione dei messaggi di errore nella pagina web
       if (isset($errorMessageEmail)) echo $errorMessageEmail;
       if (isset($errorMessagePassword)) echo $errorMessagePassword;
       if (isset($errorMessagePasswordConfirm)) echo $errorMessagePasswordConfirm;

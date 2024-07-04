@@ -11,9 +11,9 @@ if(!isset($_SESSION["sess_user"])){
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <div class="card">
-    <button class="btn btn-info" id="btnBlog">Crea Blog</button>
+    <button class="btn btn-info" id="btnBlog" color="pink">Crea Blog</button>
     <br>
-    <button class="btn btn-info" id="btnPost">Crea Post</button>
+    <button class="btn btn-info" id="btnPost" color="pink">Crea Post</button>
 </div>
 <script>
     $(document).ready(function() {

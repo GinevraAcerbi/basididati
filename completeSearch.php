@@ -4,7 +4,7 @@ include "utils/sql.php";
 if(isset($_POST["titolob"])){
     $result=array();
     $searchWord=$_POST["titolob"];
-    $titoloBlogQuery="SELECT id_blog FROM blog WHERE titolob = '$searchWord' LIMIT 1;";
+    $titoloBlogQuery="SELECT id_blog FROM blog WHERE titolob = '$searchWord' LIMIT 1;"; //limite di un risultato
     $titoloBlogResult=MySQLi_query($connection, $titoloBlogQuery);
     while($res1=mysqli_fetch_array($titoloBlogResult))
         $result[] = $res1["id_blog"];

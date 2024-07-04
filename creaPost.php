@@ -1,142 +1,94 @@
 <?php
-if (empty($_GET))
-  header("location:error.php");
 include "./common/header.php";
+if (!isset($_SESSION["sess_user"])) {
+    header("location: index.php");
+}
+
+if (isset($_POST["submit"])) {
+    query_insert_types("blog", ["id_cat_b" => $_POST["id_cat_b"], "descrzione_b" => $_POST["descrizioneb"], "titolo_b" => $_POST["titolob"], "id_utente_b" => $_SESSION["sess_user"]], ["int", "string", "string", "int"]);
+
+    $lastIdQ = "SELECT TOP 1 id_blog FROM blog ORDER BY id_blog DESC;";
+    $lastIdR = MySQLi_query($connection, $lastIdQ);
+    $lastId = -1;
+    while ($res1 = mysqli_fetch_array($lastIdR))
+        $lastId = $res1["id_blog"];
+
+    $i = 1;
+    while (isset($_POST["id_utente_fr_" + $i])) {
+        $coautoreId = query_get("utente", ["id_utente"], ["email" => $_POST["id_utente_fr_" + $i]])[0]["id_utente"];
+        query_insert_int("coautore", ["id_utente_fr" => $coautoreId, "id_blog_fr" => $lastId]);
+        $i++;
+    }
+    //AGGIUNGERE IMMAGINI
+
+    //header("refresh:1; url=index.php");
+}
 ?>
-<link rel="stylesheet" type="text/css" href="style/blog.css" />
-<?php
-$post = query_get("post", [], ["id_post" => $_GET["id_post"]]);
-$stile = query_get("stile", [], ["id_style" => $post[0]["id_style_p"]]);
-?>
-
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<?php
-if (empty($stile)) echo ("<div class='row'>");
-else echo ("<div class='row' style='font-family: " . $stile[0]["font"] . "; font-size: " . $stile[0]["dimensione"] . "'>");
-?>
-<div class="leftcolumn">
-  <div class="card">
-    <div class="cardpost"> <h1><?php echo ($post[0]["titolop"]) ?></h1>
-      <p>
-      <h6>data e ora di pubblicazione: <?php echo ($post[0]["data"]) . " " . ($post[0]["ora"]) ?></h6>
-      </p>
-      <p>
-      <h6>Blog di appartenenza:
-        <?php
-        $titoloBlog = query_get("blog", ["titolob"], ["id_blog" => $post[0]["id_blog_p"]]);
-        echo ($titoloBlog[0]["titolob"]);
-        ?>
-      </h6>
-      </p>
-      <p>
-      <h6>Creatore:
-        <?php
-        $username = query_get("utente", ["email"], ["id_utente" => $post[0]["id_utente_p"]]);
-        echo ($username[0]["email"]);
-        ?>
-      </h6>
-      </p>
-
-      <?php
-      $img = query_get("immagine", ["percorso"], ["id_post_imm" => $_GET["id_post"]]);
-      if (!$img)
-        $img[0]["percorso"] = "";
-      ?>
-      <img src="<?php echo ($img[0]["percorso"]); ?>" alt="immagine" width="50%" height="50%">
-      <p>
-      <h6>Argomento: <?php echo ($post[0]["testop"]) ?></h6>
-      </p>
-
-      <p style="padding-top:5%">
-        <?php
-        if (isset($_SESSION["sess_user"])) {
-          $nLikeUtente = query_get_count("feedback", ["id_post_f" => $post[0]["id_post"], "id_utente_f" => $_SESSION["sess_user"]]);
-          if ($nLikeUtente >= 1)
-            echo ('<i class="fa fa-thumbs-up fa-2xl" aria-hidden="true" disabled=true style="color:blue"></i>');
-          else
-            echo ('<i class="fa fa-thumbs-up fa-2xl" aria-hidden="true"></i>');
-        } else
-          echo ('<i class="fa fa-thumbs-up fa-2xl" aria-hidden="true"></i>');
-        ?>
-        <?php
-        $nLike = query_get_count("feedback", ["id_post_f" => $post[0]["id_post"]]);
-        ?>
-        <span><?php echo ($nLike); ?></span>
-      </p>
-
-      <div class="form-group">
-        <label for="exampleFormControlTextarea1">Commento</label>
-        <textarea class="form-control" id="txtCommento" rows="3"></textarea>
-        <?php
-          if (isset($_SESSION["sess_user"])) {
-            $nCommUtente = query_get("utente", ["numcomm"], [ "id_utente" => $_SESSION["sess_user"]]);
-            if ((isset($nCommUtente[0]["numcomm"]) && $nCommUtente[0]["numcomm"] <= 0))
-              echo ('<button id="btncommento" disabled=true type="button" class="btn btn-outline-dark">Posta</button>');
-            else
-              echo ('<button id="btncommento" type="button" class="btn btn-outline-dark">Posta</button>');
-          } else
-            echo ('<button id="btncommento" disabled=true type="button" class="btn btn-outline-dark">Posta</button>');
-        ?>
-      </div>
-      <?php
-      $commenti=query_get("commento", [], ["id_post_c"=>$post[0]["id_post"]]);
-      foreach ($commenti as $commento) {
-        echo('<div class="card" style="width: 18rem;">');
-          echo('<div class="card-body">');
-            echo('<h5 class="card-title">');
-              $nomeUtente=query_get("utente", ["email"], ["id_utente"=>$commento["id_utente_c"]]);
-              echo ($nomeUtente[0]["email"]);
-            echo('</h5>');
-            echo('<p class="card-text">');
-            echo ($commento["testoc"]);
-            echo('</p>');
-            echo('<span class="card-text">');
-            echo ($commento["datac"]);
-            echo('</span>');
-          echo('</div>');
-        echo('</div>');
-      } ?>
-
+<form id="formLogin" method="post" class="card" style="padding:2%;">
+    <div class="form-group">
+        <label for="titolob">Inserisci il titolo</label>
+        <input type="text" name="titolob" class="form-control" id="titolob" required>
     </div>
-  </div>
+    <div class="form-group">
+        <label for="descrizioneb">Inserisci la descrizione</label>
+        <input type="descrizioneb" name="descrizioneb" class="form-control" id="descrizioneb" required>
+    </div>
+    <div class="form-group">
+        <label for="id_cat_b">Scegli la categoria</label>
+        <?php
+        $categorie = query_get("categoria", ["id_cat", "descrcat"], []);
+        ?>
+        <select input type="id_cat_b" name="id_cat_b" class="form-control" id="id_cat_b" required>
+            <?php
+            foreach ($categorie as $cat)
+                echo "<option value='" . $cat["id_cat"] . "'>" . $cat["descrcat"] . "</option>";
+            ?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="id_utente_fr_0">Seleziona un coautore</label>
+        <?php
+        $coautori = query_get("utente", ["email"], []);
+        ?>
+        <select input name="id_utente_fr_0" class="form-control" id="id_utente_fr_0">
+            <?php
+            foreach ($coautori as $ca)
+                echo "<option value='" . $ca["email"] . "'>" . $ca["email"] . "</option>";
+            ?>
+        </select>
+    </div>
+    <br>
+    <div id="appendCoautori">
+        <label>Aggiungi un coautore</label>
+        <i id="altriCoautori" class="fa-solid fa-circle-plus"></i>
+    </div>
+    <br>
+    <div>
+        <label for="id_blog_imm">Seleziona un immagine</label>
+        <input type="file" name="id_blog_imm" id="id_blog_imm">
+    </div>
+    <br>
+    <input name="submit" type="submit" class="btn btn-primary" value="Aggiungi Post">
+</form>
 </div>
 <script>
-  $(document).ready(function() {
-    $(".fa-thumbs-up").click(function() {
-      if ($(".fa-thumbs-up").attr("disabled") != "disabled")
-        $.ajax({
-          type: "POST",
-          url: "postmanagement.php",
-          data: {
-            "id_post_f": $(location).attr('href').split('id_post=')[1],
-            "like":1
-          },
-          success: function(data) {
-            window.location.href = data;
-          }
+    $(document).ready(function() {
+        var coautoriCounter = 0;
+        $("#altriCoautori").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "gestioneCoautori.php",
+                success: function(data) {
+                    var coautori = jQuery.parseJSON(data);
+                    coautoriCounter++;
+                    $("#appendCoautori").append('<div> <label for="id_utente_fr_' + coautoriCounter + '">Seleziona un coautore</label><select name="id_utente_fr_' + coautoriCounter + '" id="id_utente_fr_' + coautoriCounter + '">');
+                    coautori.forEach(function(coautore) {
+                        var email = coautore["email"];
+                        $("#id_utente_fr_" + coautoriCounter).append('<option value=' + email + '>' + email + '</option>');
+                    });
+                    $("#appendCoautori").append('</select></div>');
+                }
+            });
         });
     });
-
-
-    $("#btncommento").click(function() {
-      if ($("#btncommento").attr("disabled") != "disabled")
-        $.ajax({
-          type: "POST",
-          url: "postmanagement.php",
-          data: {
-            "id_post_c": $(location).attr('href').split('id_post=')[1],
-            "commento": $("#txtCommento").val()
-          },
-          success: function(data) {
-            window.location.href = data;
-          }
-        });
-    });
-  });
 </script>
-
-<?php
-include "./common/footer.php";
-?>

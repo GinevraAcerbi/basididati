@@ -15,16 +15,16 @@
     <?php
     //passo da post a blog  a categoria
     $ultimiPosts=query_get_join(
-      ["post", "blog", "categoria"],
-      ["post.id_post","post.titolop","post.testop","categoria.descrcat"],
-      [],
+      ["post", "blog", "categoria"], //tabelle nella query
+      ["post.id_post","post.titolop","post.testop","categoria.descrcat"], //campi da selezionare
+      [], //nessuna condizione aggiuntiva nel WHERE
       [
-      "post.id_blog_p" => "blog.id_blog", 
-      "blog.id_cat_b" => "categoria.id_cat"
+      "post.id_blog_p" => "blog.id_blog", //collega il post al blog 
+      "blog.id_cat_b" => "categoria.id_cat" //collega il blog alla categoria
       ],
-      ["post.data", "post.ora"],
-      "DESC",
-      "4"
+      ["post.data", "post.ora"], //ordinamento per data e ora
+      "DESC", //descrescente 
+      "4" //limite dei risultati 4 
     );
     foreach($ultimiPosts as $post){
     ?>

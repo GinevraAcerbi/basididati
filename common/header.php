@@ -29,13 +29,15 @@ include "utils/sql.php";
         <button class="btn" type="submit"><i class="fa-solid fa-search"></i></button>
         &nbsp;&nbsp;&nbsp;
         <?php
+        //Bottoni che l'utente può cliccare se ha eseguito l'accesso
         if (isset($_SESSION['sess_user'])){
           echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;" href="profile.php"><i class="fa-solid fa-user"></i></a>';
           echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;"  href="crea.php"><i class="fa-solid fa-circle-plus"></i></a>';
-        }else
+        }else //bottone di login
           echo '<a class="btn btn-sm btn-outline-secondary" style="margin:2%;"  href="login.php"><i class="fa-solid fa-user"></i></a>';
         ?>
         <?php
+        //comparsa del nome dell'utente
         if(isset($_SESSION['sess_user'])) {
           $userName= query_get_int("utente", ["nome"], ["id_utente" => intval($_SESSION["sess_user"])]);
           echo '<span>benvenuto, ';
@@ -50,7 +52,8 @@ include "utils/sql.php";
     <nav class="nav nav-underline justify-content-between">
       <a name="navbar_-1" class="nav-item nav-link link-body-emphasis" href="index.php">Home</a>
       <?php
-      $allBlogs=query_get("blog",["id_blog", "titolob"]);
+      //recupero dei blog dal database
+      $allBlogs=query_get("blog",["id_blog", "titolob"]); //elementi selezionati dalla tabella blog
       foreach ($allBlogs as $blog) {
         echo "<a class='nav-item nav-link link-body-emphasis' name='navbar_".$blog["id_blog"]."'  href='blog.php?id_blog=".$blog['id_blog']."'>".$blog['titolob']."</a>";
       }
@@ -60,10 +63,11 @@ include "utils/sql.php";
   <script>
   $(document).ready(function() {
     var activeNavbar="a[name='navbar_"+localStorage.getItem("blogId")+"']";
-    $(activeNavbar).addClass("active");
-    localStorage.setItem("blogId", "");
-    $("#searchBar").keyup(function() {
-      if($('#searchBar').val()!="")
+    $(activeNavbar).addClass("active"); //viene sottolienato l'elemento selezionato 
+    localStorage.setItem("blogId", ""); //la stringa vuota garantisce che alla ricarica della pagina non sia più selezionato
+    //barra di ricerca 
+    $("#searchBar").keyup(function() { //keyup si attiva quando l'utente digita nella barra
+      if($('#searchBar').val()!="") //richiesta ajax a search.php
         $.ajax({
           type: "POST",
           url: "search.php",
@@ -73,29 +77,26 @@ include "utils/sql.php";
           }
         });
     });
-
+      //gestisce il click della navbar 
     $('a[name^="navbar_"]').click(function(){
       var blog=$(this).attr("name").split('_')[1];
       localStorage.setItem("blogId", blog);
     });
 
     function set_results(data) {
-      // Close any already open lists of autocompleted values
+      // chiude tutte le liste già aperte
       closeAllLists();
       
-      // Create a DIV element that will contain the items (values)
+      // crea un elemento div che contiene i valori= container dei risultati di ricerca 
       var $autocompleteList = $("<div id='searchBar-autocomplete-list'>").addClass("autocomplete-items");
   
-      // Append the DIV element as a child of the autocomplete container
+      //div viene aggiunto come figlio
       $("#searchbarWrapper").append($autocompleteList);
-      
       var i=0;
-      // For each item in the results
+     //per ogni elemento data, viene creato un div con un id unico
       for(i=0; i<data.length; i++){
-        // Create a DIV element for each matching element
         var $item = $("<div id='item" + i + "'>");
       
-        // Insert a input field that will hold the current array item's value
         if (data[i].name == "titolob") {
           $item.html("Titolo Blog: " + data[i].value + "<input type='hidden' value='titolo_"+ data[i].value +"'>");
         } else if (data[i].name == "descrizioneb") {
@@ -106,13 +107,15 @@ include "utils/sql.php";
           $item.html("Utente: " + data[i].value + "<input type='hidden' value='utente_" + data[i].value + "'>");
         }
         
-        // Execute a function when someone clicks on the item value (DIV element)
+        //per ogni risultato viene aggiunto un click
         $item.on("click", function() {
           $("#searchBar").val($(this).find("input").val());
+          //tutte le liste di autocompletamento vengono chiuse
           closeAllLists();
           var key = $(this).find("input").val().split('_')[0];
           var value = $(this).find("input").val().split('_')[1];
           if(key == "titolo"){
+            //chiamate ajax a seconda della key (tipo)
             $.ajax({
               type: "POST",
               url: "completeSearch.php",
@@ -150,7 +153,7 @@ include "utils/sql.php";
     }
 
     function closeAllLists(elmnt) {
-      // Close all autocomplete lists in the document, except the one passed as an argument
+      // viene mostrata solo la lista richiesta
       $(".autocomplete-items").not(elmnt).remove();
     }
   });

@@ -5,8 +5,8 @@ include "./common/header.php";
 ?>
 <link rel="stylesheet" type="text/css" href="style/blog.css" />
 <?php
-$userId = query_get("utente", ["id_utente"], ["email" => $_GET["user"]])[0]["id_utente"];
-$blogs = query_get("blog", [], ["id_utente_b" => $userId]);
+$userId = query_get("utente", ["id_utente"], ["email" => $_GET["user"]])[0]["id_utente"]; //recupero id utente
+$blogs = query_get("blog", [], ["id_utente_b" => $userId]); //recupero blog associati all'utente
 ?>
 
 <head>
@@ -33,6 +33,7 @@ foreach($blogs as $blog){
         if (count($post_correlati_id) > 0) {
           $i = 0;
           for ($i = 0; $i < count($post_correlati_id); $i++) {
+            //ciclo per ogni post correlato 
             $post_correlati = query_get("post", [], ["id_post" => intval($post_correlati_id[$i]["id_post"])]);
         ?><h1><?php echo ($post_correlati[0]["titolop"]) ?></h1>
             <p>

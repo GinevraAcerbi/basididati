@@ -5,7 +5,7 @@ if(!isset($_SESSION["sess_user"])){
 }
 ?>
 <?php
-
+//controlla che l'utente sia verificato
 $user=query_get_int("utente", [], ["id_utente" => intval($_SESSION["sess_user"])]);
 ?>
 <link href="./style/profile.css" rel="stylesheet" type="text/css">
@@ -78,6 +78,7 @@ $user=query_get_int("utente", [], ["id_utente" => intval($_SESSION["sess_user"])
     </form>
 </div>
 <script>
+    //jquery per gestire il pulsante di logout
     $(document).ready(function(){
         $("#btnLogOut").click( function(){
             $.ajax({

@@ -6,6 +6,7 @@ include "utils/regExp.php";
 <html lang="it">
 
 <?php
+//controllo dei campi attraverso le funzioni di regExp.php
 if (isset($_POST["submit"])) {
   if (!emailIsValid($_POST["email"])) {
     $errorMessageEmail = "<div class='alert alert-danger' role='alert'> inserire una email valida </div>";
@@ -59,6 +60,7 @@ if (isset($_POST["submit"])) {
       <a href="signUp.php">Registrati</a><br>
       <input name="submit" type="submit" class="btn btn-primary" value="login">
       <?php
+      //visualizzazione dei messaggi di errore nella pagina web
       if (isset($errorMessageEmail)) echo $errorMessageEmail;
       if (isset($errorMessagePassword)) echo $errorMessagePassword;
       if (isset($errorMessageLogin)) echo $errorMessageLogin;
@@ -66,6 +68,7 @@ if (isset($_POST["submit"])) {
     </form>
   </div>
   <script>
+    //jquery per gestire il il ritorno alla pagina precedente
      $(document).ready(function(){
         $("#backButton").click( function(){
           window.history.back();

@@ -10,11 +10,12 @@ include "./common/header.php";
 $blog = query_get("blog", [], ["id_blog" => $_GET["id_blog"]]);
 ?>
 
-<head>
+<head> <!--dettagli del blog nel database-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <div class="header">
+<!--visualizzazione descrizione e titolo-->
   <h1><?php echo ($blog[0]["titolob"]) ?></h1>
   <h3>
     <p><?php echo ($blog[0]["descrizioneb"]) ?></p>
@@ -58,6 +59,7 @@ $blog = query_get("blog", [], ["id_blog" => $_GET["id_blog"]]);
   <div class="leftcolumn">
     <div class="card">
       <?php
+      //recupero post correlati al blog 
       $post_correlati_id = query_get("post", ["id_post"], ["id_blog_p" => $_GET["id_blog"]]);
       if (count($post_correlati_id) > 0) {
         $i = 0;

@@ -98,7 +98,7 @@ e i campi di filtraggio ($filters) come coppie chiave valore e i campi in join i
 */
 function query_get_join($tables=[], $fields=[], $filters=[], $joinFields=[], $orderByFields=[], $order, $limit){ 
     global $connection;
-    $query="SELECT DISTINCT ";
+    $query="SELECT DISTINCT "; //selezionati solo i risultati univoci
     if($fields){
         $i=0;
         foreach($fields as $field){
